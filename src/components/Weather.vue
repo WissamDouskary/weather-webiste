@@ -1,8 +1,8 @@
 <template>
     <div class="h-screen w-screen bg-gradient-to-br from-teal-200 to-teal-600 flex flex-col">
       <header class="bg-white bg-opacity-90 shadow-md py-4 px-8">
-        <div class="w-full px-8 flex items-center justify-between">
-          <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-2">
+        <div class="w-full px-8 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-6">
+          <h1 class="text-3xl font-bold text-gray-800 flex items-center">
             <span class="text-4xl">🌦️</span> Weather
           </h1>
           <div class="w-96 relative">
