@@ -38,6 +38,17 @@
               </div>
             </div>
           </div>
+
+          <button @click="togglemodal" class="w-full mt-6 p-3 pl-4 pr-10 rounded-full text-gray-700 bg-gray-50 outline-none transition-all duration-200 w-96 bg-teal-400 border-none">Show More Details</button>
+
+          <div class="mt-6" v-if="showModal && forecast">
+          <h3 class="text-lg font-semibold text-gray-700 mb-6">Next Hours</h3>
+          <div v-for="fore in forecast.list.slice(0, 6)" :key="fore.dt" class="flex justify-between">
+            <p class="text-gray-600">{{ new Date(fore.dt * 1000).toLocaleTimeString() }}</p>
+            <p class="text-gray-600">{{ fore.main.temp }} °C</p>
+            <p class="capitalize text-gray-500">{{ fore.weather[0].description }}</p>
+          </div>
+        </div>
         </div>
   
         <div v-if="error" class="mt-6 bg-red-50 text-red-600 p-4 rounded-xl text-center">
@@ -45,15 +56,22 @@
         </div>
       </div>
     </div>
-  </template>
+</template>
 
 <script setup>
 import { ref } from 'vue'
+
+const showModal = ref(false)
+
+const togglemodal = () => {
+    showModal.value = !showModal.value
+}
 
 const city = ref('')
 const loading = ref(false)
 const weather = ref(null)
 const error = ref(null)
+const forecast = ref(null)
 
 const API_KEY = 'c27cfba05cedcac6ec9766bf58b2aea0'
 
@@ -66,6 +84,10 @@ const getWeather = async () => {
         const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&appid=${API_KEY}`)
         if (!weatherResponse.ok) throw new Error('City not found or API error')
         weather.value = await weatherResponse.json()
+
+        const forecastResponse = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city.value}&units=metric&appid=${API_KEY}`);
+        if (!forecastResponse.ok) throw new Error('forecast not found!')
+        forecast.value = await forecastResponse.json()
     }
     catch (err) {
         error.value = err.message
